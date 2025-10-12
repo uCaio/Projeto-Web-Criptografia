@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Criptografia</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Sistema de Criptografia</h1>
+  <div class="container">
+    <label for="algoritmo">Algoritmo:</label>
+    <select id="algoritmo">
+      <option value="cesar">Cifra de César</option>
+      <option value="vigenere">Cifra de Vigenère</option>
+      <option value="hill">Cifra de Hill (2x2)</option>
+      <option value="otp">One-Time Pad (OTP)</option>
+    </select>
+
+    <label for="mensagem">Mensagem:</label>
+    <textarea id="mensagem" rows="3" placeholder="Digite o texto..."></textarea>
+
+    <label for="chave">Chave:</label>
+    <input id="chave" type="text" placeholder="Digite a chave (ou número no caso de César)" />
+
+    <div class="botoes">
+      <button onclick="criptografar()">Criptografar</button>
+      <button onclick="descriptografar()">Descriptografar</button>
+    </div>
+
+    <div class="output" id="saida"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

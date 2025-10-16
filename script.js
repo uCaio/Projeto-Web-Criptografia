@@ -37,6 +37,12 @@ function cesar(texto, deslocamento = 3, cifrar = true) {
 
 // --- CIFRA DE VIGENERE ---
 function vigenere(texto, chave, cifrar = true) {
+  // validação: pelo menos 4 palavras
+  const palavras = texto.trim().split(/\s+/);
+  if (palavras.length < 4) {
+    return '❌ A mensagem deve conter pelo menos 4 palavras.';
+  }
+
   let resultado = '';
   let j = 0;
   for (let i = 0; i < texto.length; i++) {
@@ -52,29 +58,36 @@ function vigenere(texto, chave, cifrar = true) {
   return resultado;
 }
 
-// --- ONE TIME PAD ---
-function otp(texto, chave) {
-  let resultado = '';
-  for (let i = 0; i < texto.length; i++) {
-    const t = texto.charCodeAt(i);
-    const k = chave.charCodeAt(i % chave.length);
-    resultado += String.fromCharCode(t ^ k);
+// --- ONE TIME PAD  ---
+function otp(msg, chave) {
+  const msgNums = msg.trim().split(' ').map(Number);
+  const keyNums = chave.trim().split(' ').map(Number);
+
+  if (msgNums.some(isNaN) || keyNums.some(isNaN)) {
+    return '❌ Mensagem e chave devem conter apenas números em base decimal.';
   }
-  return btoa(resultado); // Exibe em Base64
+
+  const resultadoDec = msgNums.map((num, i) => num ^ keyNums[i % keyNums.length]);
+  const resultadoBin = resultadoDec.map(n => n.toString(2).padStart(8, '0'));
+
+  let saida = '🔒 Resultado OTP:\n';
+  saida += 'Decimal: ' + resultadoDec.join(' ') + '\n';
+  saida += 'Binário: ' + resultadoBin.join(' ');
+  return saida;
 }
 
-// --- CIFRA DE HILL (2x2) ---
+// --- CIFRA DE HILL ---
 function hill(texto, chave, cifrar = true) {
   texto = texto.replace(/[^A-Z]/g, '');
   if (texto.length % 2 !== 0) texto += 'X';
   const nums = texto.split('').map(c => c.charCodeAt(0) - 65);
 
   const k = chave.replace(/[^0-9 ]/g, '').split(' ').map(Number);
-  if (k.length !== 4) return 'A chave deve conter 4 números (matriz 2x2)';
+  if (k.length !== 4) return '❌ A chave deve conter 4 números (matriz 2x2)';
 
   const det = (k[0] * k[3] - k[1] * k[2] + 26) % 26;
   const invDet = inversoMod(det, 26);
-  if (invDet === -1) return 'Determinante não tem inverso módulo 26.';
+  if (invDet === -1) return '❌ Determinante não tem inverso módulo 26.';
 
   let matriz;
   if (cifrar) matriz = k;

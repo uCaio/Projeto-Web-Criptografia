@@ -60,14 +60,22 @@ function vigenere(texto, chave, cifrar = true) {
 
 // --- ONE TIME PAD  ---
 function otp(msg, chave) {
+  // Verifica se a chave é menor que a mensagem
+  if (chave.length < msg.length) {
+    return '⚠️ A chave deve ser de tamanho maior ou igual ao da mensagem.';
+  }
+
   const msgNums = msg.trim().split(' ').map(Number);
   const keyNums = chave.trim().split(' ').map(Number);
 
+
+  // Verifica se são números válidos
   if (msgNums.some(isNaN) || keyNums.some(isNaN)) {
     return '❌ Mensagem e chave devem conter apenas números em base decimal.';
   }
 
-  const resultadoDec = msgNums.map((num, i) => num ^ keyNums[i % keyNums.length]);
+  // Executa XOR
+  const resultadoDec = msgNums.map((num, i) => num ^ keyNums[i]);
   const resultadoBin = resultadoDec.map(n => n.toString(2).padStart(8, '0'));
 
   let saida = '🔒 Resultado OTP:\n';
@@ -75,6 +83,7 @@ function otp(msg, chave) {
   saida += 'Binário: ' + resultadoBin.join(' ');
   return saida;
 }
+
 
 // --- CIFRA DE HILL ---
 function hill(texto, chave, cifrar = true) {
